@@ -1,32 +1,63 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
+    <!-- A área principal onde cada rota é carregada -->
     <router-view />
+
+    <!-- Barra de navegação fixa no rodapé, exibida somente se a rota atual NÃO for Login/Register -->
+    <nav
+      class="bottom-nav"
+      v-if="$route.name !== 'UserLogin' && $route.name !== 'UserRegister'"
+    >
+      <router-link to="/profile" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Perfil</span>
+      </router-link>
+      <router-link to="/scheduling" class="nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Agendamentos</span>
+      </router-link>
+    </nav>
   </div>
 </template>
 
+<script>
+export default {
+  name: "App",
+};
+</script>
+
 <style>
+/* Espaço para a barra inferior não sobrepor o conteúdo */
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  padding-bottom: 60px; /* altura da bottom-nav */
 }
 
-nav {
-  padding: 30px;
+/* Barra fixa no rodapé */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+/* Itens da barra */
+.nav-item {
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+.nav-item i {
+  font-size: 20px;
+  margin-bottom: 4px;
 }
 </style>
