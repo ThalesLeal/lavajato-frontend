@@ -2,21 +2,6 @@
   <div id="app">
     <!-- A área principal onde cada rota é carregada -->
     <router-view />
-
-    <!-- Barra de navegação fixa no rodapé, exibida somente se a rota atual NÃO for Login/Register -->
-    <nav
-      class="bottom-nav"
-      v-if="$route.name !== 'UserLogin' && $route.name !== 'UserRegister'"
-    >
-      <router-link to="/profile" class="nav-item">
-        <i class="fas fa-user"></i>
-        <span>Perfil</span>
-      </router-link>
-      <router-link to="/scheduling" class="nav-item">
-        <i class="fas fa-calendar-alt"></i>
-        <span>Agendamentos</span>
-      </router-link>
-    </nav>
   </div>
 </template>
 

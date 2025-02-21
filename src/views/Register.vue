@@ -3,12 +3,12 @@
     <h2>Cadastro</h2>
     <form @submit.prevent="register">
       <div class="form-group">
-        <label for="username">Usuário</label>
+        <label for="nome">Nome</label>
         <input
-          v-model="form.username"
+          v-model="form.nome"
           type="text"
-          id="username"
-          placeholder="Digite seu usuário"
+          id="nome"
+          placeholder="Digite seu nome"
           required
         />
       </div>
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       form: {
-        username: "",
+        nome: "",
         email: "",
         password: "",
       },
@@ -63,7 +63,10 @@ export default {
         this.$router.push("/login");
       } catch (error) {
         console.error(error);
-        alert("Erro ao cadastrar: " + error.response.data.detail);
+        alert(
+          "Erro ao cadastrar: " +
+            (error.response?.data?.detail || "Erro desconhecido.")
+        );
       }
     },
   },

@@ -3,12 +3,12 @@
     <h2>Login</h2>
     <form @submit.prevent="login">
       <div class="form-group">
-        <label for="username">Usuário</label>
+        <label for="email">Email</label>
         <input
-          v-model="form.username"
-          type="text"
-          id="username"
-          placeholder="Digite seu usuário"
+          v-model="form.email"
+          type="email"
+          id="email"
+          placeholder="Digite seu email"
           required
         />
       </div>
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       form: {
-        username: "",
+        email: "",
         password: "",
       },
     };
@@ -47,17 +47,20 @@ export default {
   methods: {
     async login() {
       try {
+        // Envia email e password para o endpoint de login
         const response = await axios.post(
           "http://127.0.0.1:8000/api/auth/login/",
           this.form
         );
-        // Salva o token no localStorage para uso em requisições autenticadas
-        localStorage.setItem("token", response.data.token);
-        // Redireciona para o perfil ou dashboard
-        this.$router.push("/profile");
+        // Supondo que o backend retorne { id, email, nome, telefone }
+        localStorage.setItem("clienteId", response.data.id);
+        this.$router.push("/dashboard");
       } catch (error) {
         console.error(error);
-        alert("Erro no login: " + error.response.data.detail);
+        alert(
+          "Erro no login: " +
+            (error.response?.data?.detail || "Erro desconhecido.")
+        );
       }
     },
   },

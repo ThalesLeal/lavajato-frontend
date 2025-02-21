@@ -19,7 +19,6 @@ export default new Router({
   routes: [
     // Rota raiz redireciona para o login
     { path: "/", redirect: "/login" },
-    // Rotas do usuário
     {
       path: "/login",
       name: "UserLogin",
@@ -35,6 +34,7 @@ export default new Router({
       name: "UserDashboard",
       component: UserDashboard,
     },
+    // Aqui, para o perfil usamos uma rota sem parâmetro e o ID é obtido do localStorage
     {
       path: "/profile",
       name: "UserProfile",
