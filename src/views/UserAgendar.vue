@@ -6,9 +6,8 @@
     <div v-if="loading">
       <p>Carregando calendário...</p>
     </div>
-    <!-- Caso contrário, exibe o calendário e a seção de horários -->
     <div v-else>
-      <!-- CALENDÁRIO SEMPRE VISÍVEL -->
+      <!-- Calendário sempre visível -->
       <div class="calendar-header">
         <button class="btn-mes" @click="prevMonth">Anterior</button>
         <h3>{{ monthName }} de {{ currentYear }}</h3>
@@ -37,7 +36,7 @@
         </table>
       </div>
 
-      <!-- SE HOUVER selectedDay, EXIBE HORÁRIOS E FORMULÁRIO -->
+      <!-- Se um dia for selecionado, exibe os horários disponíveis e o formulário -->
       <div v-if="selectedDay" class="schedule-section">
         <h3 class="selected-day">{{ formatDate(selectedDay) }}</h3>
         <h4>Horários disponíveis</h4>
@@ -88,14 +87,13 @@
       </div>
     </div>
 
-    <!-- Botão de voltar no final -->
+    <!-- Botão de voltar no final, centralizado -->
     <button class="btn-voltar" @click="goBack">Voltar ao Dashboard</button>
   </div>
 </template>
 
 <script>
-// Se não estiver usando axios, mantenha comentado ou remova
-// import axios from "axios";
+// import axios from "axios"; // Descomente se utilizar chamadas reais ao backend
 
 export default {
   name: "UserAgendar",
@@ -106,9 +104,9 @@ export default {
       currentYear: new Date().getFullYear(),
       weekDays: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
       weeks: [],
-      selectedDay: null, // Dia selecionado
-      availableSlots: [], // Horários do dia selecionado
-      selectedSlot: null, // Horário escolhido
+      selectedDay: null,
+      availableSlots: [],
+      selectedSlot: null,
       tipoLavagem: "",
       placa: "",
       slotConfirmed: false,
@@ -136,7 +134,6 @@ export default {
   async created() {
     try {
       this.generateCalendar(this.currentYear, this.currentMonth);
-      // Simula um pequeno delay de loading
       await new Promise((resolve) => setTimeout(resolve, 300));
     } catch (error) {
       console.error("Erro ao carregar calendário:", error);
@@ -147,14 +144,13 @@ export default {
   },
   methods: {
     goBack() {
-      // Volta ao dashboard
       this.$router.replace("/dashboard");
     },
     generateCalendar(year, month) {
       this.weeks = [];
       const firstDayOfMonth = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
-      const startWeekDay = firstDayOfMonth.getDay(); // 0 (Dom) a 6 (Sáb)
+      const startWeekDay = firstDayOfMonth.getDay();
       let currentDate = new Date(year, month, 1 - startWeekDay);
 
       while (currentDate <= lastDay || currentDate.getDay() !== 0) {
@@ -174,7 +170,6 @@ export default {
         this.weeks.push(week);
       }
     },
-    // Adiciona classe "selected" se for o dia clicado
     dayClass(day) {
       let classes = [];
       if (day.date) {
@@ -193,24 +188,40 @@ export default {
       }
       return classes.join(" ");
     },
-    selectCalendarDay(day) {
+    async selectCalendarDay(day) {
       if (!day.date || !day.isCurrentMonth) return;
       this.selectedDay = day.date;
-      this.fetchSlots(day.date);
-      // Reseta o slot e a mensagem de sucesso
+      await this.fetchSlots(day.date);
       this.selectedSlot = null;
       this.slotConfirmed = false;
     },
-    async fetchSlots() {
-      // Exemplo real: chamaria o backend
-      // this.availableSlots = ...
-      // Simulação:
-      this.availableSlots = [
-        { id: 1, hora: "08:00", ocupado: false },
-        { id: 2, hora: "10:00", ocupado: false },
-        { id: 3, hora: "14:00", ocupado: true },
-        { id: 4, hora: "16:00", ocupado: false },
-      ];
+    async fetchSlots(dateObj) {
+      // Converte a data para "YYYY-MM-DD" inline
+      // const formattedDate = new Date(dateObj).toISOString().split("T")[0];
+      try {
+        // Se integrar com o backend, descomente e ajuste:
+        /*
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/available_slots?date=${formattedDate}`,
+          { headers: { Authorization: `Token ${token}` } }
+        );
+        this.availableSlots = response.data;
+        */
+        // Exemplo simulado: gera slots das 08:00 às 18:00
+        this.availableSlots = [];
+        for (let hour = 8; hour <= 18; hour++) {
+          const ocupado = Math.random() < 0.3;
+          this.availableSlots.push({
+            id: parseInt(`${dateObj.getDate()}${hour}`),
+            hora: `${hour.toString().padStart(2, "0")}:00`,
+            ocupado: ocupado,
+          });
+        }
+      } catch (error) {
+        console.error("Erro ao buscar horários:", error);
+        alert("Não foi possível carregar os horários disponíveis.");
+      }
     },
     selectSlot(slot) {
       if (!slot.ocupado) {
@@ -223,7 +234,17 @@ export default {
     async confirmarAgendamento() {
       if (!this.selectedSlot) return;
       try {
-        // Exemplo: POST no backend
+        // const dateStr = this.selectedDay.toISOString().split("T")[0];
+        // Se integrar com o backend, descomente e ajuste:
+        /*
+        const token = localStorage.getItem("token");
+        await axios.post("http://127.0.0.1:8000/api/agendar", {
+          date: dateStr,
+          hora: this.selectedSlot.hora,
+          tipoLavagem: this.tipoLavagem,
+          placa: this.placa
+        }, { headers: { Authorization: `Token ${token}` } });
+        */
         alert(`Agendado com sucesso:
 Dia: ${this.formatDate(this.selectedDay)}
 Hora: ${this.selectedSlot.hora}
@@ -233,7 +254,7 @@ Placa: ${this.placa}`);
         this.slotConfirmed = true;
       } catch (error) {
         console.error("Erro ao agendar:", error);
-        alert("Erro ao agendar.");
+        alert("Erro ao agendar horário.");
       }
     },
     formatDate(dateObj) {
@@ -247,6 +268,10 @@ Placa: ${this.placa}`);
         this.currentMonth--;
       }
       this.generateCalendar(this.currentYear, this.currentMonth);
+      this.selectedDay = null;
+      this.availableSlots = [];
+      this.selectedSlot = null;
+      this.slotConfirmed = false;
     },
     nextMonth() {
       if (this.currentMonth === 11) {
@@ -256,6 +281,10 @@ Placa: ${this.placa}`);
         this.currentMonth++;
       }
       this.generateCalendar(this.currentYear, this.currentMonth);
+      this.selectedDay = null;
+      this.availableSlots = [];
+      this.selectedSlot = null;
+      this.slotConfirmed = false;
     },
   },
 };
