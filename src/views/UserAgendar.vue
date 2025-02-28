@@ -1,9 +1,15 @@
 <template>
   <div class="agendar">
+    <!-- Logo no topo -->
+    <div class="logo-container">
+      <!-- Ajuste o caminho conforme onde sua imagem estiver (ex: "@/assets/logomarca.png") -->
+      <img src="@/assets/logomarca.png" alt="Royal Carwash Logo" class="logo" />
+    </div>
+
     <h2>Agendar Lavagem</h2>
 
     <!-- Se está carregando, mostra a mensagem -->
-    <div v-if="loading">
+    <div v-if="loading" class="loading-state">
       <p>Carregando calendário...</p>
     </div>
     <div v-else>
@@ -196,31 +202,16 @@ export default {
       this.slotConfirmed = false;
     },
     async fetchSlots(dateObj) {
-      // Converte a data para "YYYY-MM-DD" inline
-      // const formattedDate = new Date(dateObj).toISOString().split("T")[0];
-      try {
-        // Se integrar com o backend, descomente e ajuste:
-        /*
-        const token = localStorage.getItem("token");
-        const response = await axios.get(
-          `http://127.0.0.1:8000/api/available_slots?date=${formattedDate}`,
-          { headers: { Authorization: `Token ${token}` } }
-        );
-        this.availableSlots = response.data;
-        */
-        // Exemplo simulado: gera slots das 08:00 às 18:00
-        this.availableSlots = [];
-        for (let hour = 8; hour <= 18; hour++) {
-          const ocupado = Math.random() < 0.3;
-          this.availableSlots.push({
-            id: parseInt(`${dateObj.getDate()}${hour}`),
-            hora: `${hour.toString().padStart(2, "0")}:00`,
-            ocupado: ocupado,
-          });
-        }
-      } catch (error) {
-        console.error("Erro ao buscar horários:", error);
-        alert("Não foi possível carregar os horários disponíveis.");
+      // Exemplo simulado: gera slots das 08:00 às 18:00
+      // Ajuste se integrar com backend
+      this.availableSlots = [];
+      for (let hour = 8; hour <= 18; hour++) {
+        const ocupado = Math.random() < 0.3;
+        this.availableSlots.push({
+          id: parseInt(`${dateObj.getDate()}${hour}`),
+          hora: `${hour.toString().padStart(2, "0")}:00`,
+          ocupado: ocupado,
+        });
       }
     },
     selectSlot(slot) {
@@ -234,17 +225,6 @@ export default {
     async confirmarAgendamento() {
       if (!this.selectedSlot) return;
       try {
-        // const dateStr = this.selectedDay.toISOString().split("T")[0];
-        // Se integrar com o backend, descomente e ajuste:
-        /*
-        const token = localStorage.getItem("token");
-        await axios.post("http://127.0.0.1:8000/api/agendar", {
-          date: dateStr,
-          hora: this.selectedSlot.hora,
-          tipoLavagem: this.tipoLavagem,
-          placa: this.placa
-        }, { headers: { Authorization: `Token ${token}` } });
-        */
         alert(`Agendado com sucesso:
 Dia: ${this.formatDate(this.selectedDay)}
 Hora: ${this.selectedSlot.hora}
@@ -291,20 +271,42 @@ Placa: ${this.placa}`);
 </script>
 
 <style scoped>
+/* Fundo inspirado na logo (azul-escuro), texto claro */
 .agendar {
-  max-width: 800px;
-  margin: 2rem auto;
+  background-color: #0a1b2e;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff; /* texto branco */
+  padding: 2rem;
   text-align: center;
-  background-color: #fafafa;
-  padding: 1.5rem;
-  border-radius: 10px;
-  border: 1px solid #eee;
 }
 
-h2 {
+/* Container para a logo */
+.logo-container {
   margin-bottom: 1rem;
 }
 
+/* Ajuste de tamanho da logo */
+.logo {
+  height: 80px;
+  width: auto;
+}
+
+/* Título principal em amarelo/laranja */
+h2 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: #f8c253;
+}
+
+.loading-state p {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+/* Cabeçalho do calendário */
 .calendar-header {
   display: flex;
   justify-content: space-between;
@@ -312,40 +314,50 @@ h2 {
   margin-bottom: 1rem;
 }
 
+/* Botões de trocar mês */
 .btn-mes {
   padding: 0.5rem 1rem;
-  background-color: #ddd;
-  border: none;
+  background-color: #142b44;
+  border: 1px solid #f8c253;
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
+  color: #f8c253;
 }
 .btn-mes:hover {
-  background-color: #ccc;
+  background-color: #1d3a5f;
 }
 
+/* Wrapper do calendário */
 .calendar-wrapper {
   overflow-x: auto;
   margin-bottom: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto 1rem auto;
 }
 
+/* Tabela do calendário */
 .calendar-table {
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
-  background-color: #fff;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  text-align: center;
 }
 
 .calendar-table th,
 .calendar-table td {
   width: 14.28%;
   height: 70px;
-  border: 1px solid #eee;
-  text-align: center;
+  border: 1px solid #ddd;
   vertical-align: middle;
   cursor: pointer;
+  transition: background-color 0.2s;
+  color: #000; /* texto preto no calendário */
+  background-color: #fafafa;
 }
 
 .calendar-table th {
@@ -353,12 +365,10 @@ h2 {
   font-weight: 600;
 }
 
-.calendar-day {
-  transition: background-color 0.2s;
-}
 .calendar-day:hover {
   background-color: #f9f9f9;
 }
+
 .selected {
   background-color: #cde4ff !important;
   font-weight: 600;
@@ -381,6 +391,7 @@ h2 {
   margin-bottom: 1rem;
   font-weight: 600;
   font-size: 1.2rem;
+  color: #f8c253;
 }
 
 .slots {
@@ -391,20 +402,28 @@ h2 {
   margin-bottom: 1rem;
 }
 
+/* Botões de horário */
 .slot-btn {
   padding: 0.5rem 1rem;
-  border: none;
-  background-color: #007bff;
-  color: #fff;
+  border: 1px solid #f8c253;
+  background-color: #142b44;
+  color: #f8c253;
   border-radius: 6px;
   cursor: pointer;
   margin-bottom: 0.5rem;
+  transition: transform 0.2s, background-color 0.2s;
+}
+.slot-btn:hover {
+  transform: scale(1.05);
+  background-color: #1d3a5f;
 }
 .slot-btn:disabled {
   background-color: #ccc;
+  color: #777;
   cursor: not-allowed;
 }
 
+/* Formulário de agendamento */
 .agendamento-form {
   margin-top: 1rem;
   display: flex;
@@ -428,6 +447,7 @@ h2 {
 
 .form-group label {
   font-weight: 600;
+  color: #f8c253;
 }
 
 form select,
@@ -436,8 +456,10 @@ form input {
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 200px;
+  color: #000; /* texto preto */
 }
 
+/* Botão de confirmar agendamento */
 .btn-confirmar {
   background-color: #28a745;
   color: #fff;
@@ -452,22 +474,25 @@ form input {
   background-color: #218838;
 }
 
+/* Mensagem de sucesso */
 .success-msg {
   color: #28a745;
   font-weight: 600;
   margin-top: 1rem;
 }
 
+/* Botão de voltar */
 .btn-voltar {
   margin-top: 2rem;
   padding: 0.6rem 1.2rem;
-  background-color: #aaa;
-  border: none;
+  background-color: #142b44;
+  border: 1px solid #f8c253;
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
+  color: #f8c253;
 }
 .btn-voltar:hover {
-  background-color: #999;
+  background-color: #1d3a5f;
 }
 </style>
