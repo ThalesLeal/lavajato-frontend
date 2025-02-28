@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="dashboard">
     <h2>Bem-vindo!</h2>
     <div class="options">
@@ -58,4 +58,4 @@ export default {
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
-</style>
+</style> -->

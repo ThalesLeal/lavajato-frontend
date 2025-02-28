@@ -2,13 +2,20 @@
   <div class="dashboard">
     <h2>Bem-vindo!</h2>
     <div class="options">
+      <!-- Botão de Perfil -->
       <div class="option" @click="goToProfile">
         <i class="fas fa-user"></i>
         <p>Perfil</p>
       </div>
+      <!-- Botão de Agendamentos (lista) -->
       <div class="option" @click="goToScheduling">
         <i class="fas fa-calendar-alt"></i>
         <p>Agendamentos</p>
+      </div>
+      <!-- Botão de Agendar (calendário) -->
+      <div class="option" @click="goToAgendar">
+        <i class="fas fa-calendar-plus"></i>
+        <p>Agendar</p>
       </div>
     </div>
   </div>
@@ -19,10 +26,31 @@ export default {
   name: "UserDashboard",
   methods: {
     goToProfile() {
-      this.$router.push("/profile");
+      if (this.$route.path !== "/profile") {
+        this.$router.push("/profile").catch((err) => {
+          if (err.name !== "NavigationDuplicated") {
+            throw err;
+          }
+        });
+      }
     },
     goToScheduling() {
-      this.$router.push("/scheduling");
+      if (this.$route.path !== "/scheduling") {
+        this.$router.push("/scheduling").catch((err) => {
+          if (err.name !== "NavigationDuplicated") {
+            throw err;
+          }
+        });
+      }
+    },
+    goToAgendar() {
+      if (this.$route.path !== "/agendar") {
+        this.$router.push("/agendar").catch((err) => {
+          if (err.name !== "NavigationDuplicated") {
+            throw err;
+          }
+        });
+      }
     },
   },
 };

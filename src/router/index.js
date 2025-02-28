@@ -12,6 +12,9 @@ import UserScheduling from "@/views/Scheduling.vue";
 import AdminPanel from "@/views/components/AdminPanel.vue";
 import Agendamento from "@/views/components/Agendamento.vue";
 
+// Nova rota para o componente de agendamento com calendário
+import UserAgendar from "@/views/UserAgendar.vue";
+
 Vue.use(Router);
 
 export default new Router({
@@ -34,7 +37,7 @@ export default new Router({
       name: "UserDashboard",
       component: UserDashboard,
     },
-    // Aqui, para o perfil usamos uma rota sem parâmetro e o ID é obtido do localStorage
+    // Rota de perfil (obtém o ID do usuário a partir de localStorage, por exemplo)
     {
       path: "/profile",
       name: "UserProfile",
@@ -55,6 +58,12 @@ export default new Router({
       path: "/agendamento",
       name: "Agendamento",
       component: Agendamento,
+    },
+    // Nova rota para o componente de agendamento/calendário
+    {
+      path: "/agendar",
+      name: "UserAgendar",
+      component: UserAgendar,
     },
   ],
 });
