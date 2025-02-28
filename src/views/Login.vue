@@ -24,10 +24,7 @@
       </div>
       <button type="submit">Entrar</button>
     </form>
-    <p>
-      Não tem conta?
-      <router-link to="/register">Cadastre-se</router-link>
-    </p>
+    <p>Não tem conta? <router-link to="/register">Cadastre-se</router-link></p>
   </div>
 </template>
 
@@ -47,13 +44,13 @@ export default {
   methods: {
     async login() {
       try {
-        // Envia email e password para o endpoint de login
+        // Chama o endpoint correto: /auth/token/ (definido em auth_urls.py)
         const response = await axios.post(
-          "http://127.0.0.1:8000/api/auth/login/",
+          "http://127.0.0.1:8000/auth/token/",
           this.form
         );
-        // Supondo que o backend retorne { id, email, nome, telefone }
-        localStorage.setItem("clienteId", response.data.id);
+        console.log("Token recebido:", response.data.access);
+        localStorage.setItem("token", response.data.access);
         this.$router.push("/dashboard");
       } catch (error) {
         console.error(error);
@@ -74,22 +71,30 @@ export default {
   padding: 2rem;
   border: 1px solid #ddd;
   border-radius: 8px;
+  text-align: center;
+  background-color: #f7f7f7;
 }
 .form-group {
   margin-bottom: 1rem;
+  text-align: left;
 }
 input {
   width: 100%;
   padding: 0.5rem;
+  margin-top: 0.3rem;
   box-sizing: border-box;
 }
 button {
   width: 100%;
   padding: 0.5rem;
-  background-color: #007bff;
+  background-color: #142b44;
   border: none;
-  color: white;
+  color: #f8c253;
   cursor: pointer;
   border-radius: 4px;
+  font-weight: 600;
+}
+button:hover {
+  background-color: #1d3a5f;
 }
 </style>
