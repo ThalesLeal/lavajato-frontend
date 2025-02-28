@@ -1,5 +1,9 @@
 <template>
   <div class="login-container">
+    <!-- Logo no topo -->
+    <div class="logo-container">
+      <img src="@/assets/logomarca.png" alt="Royal Carwash Logo" class="logo" />
+    </div>
     <h2>Login</h2>
     <form @submit.prevent="login">
       <div class="form-group">
@@ -24,7 +28,10 @@
       </div>
       <button type="submit">Entrar</button>
     </form>
-    <p>Não tem conta? <router-link to="/register">Cadastre-se</router-link></p>
+    <p>
+      Não tem conta?
+      <router-link to="/register">Cadastre-se</router-link>
+    </p>
   </div>
 </template>
 
@@ -69,21 +76,43 @@ export default {
   max-width: 400px;
   margin: 2rem auto;
   padding: 2rem;
-  border: 1px solid #ddd;
+  border: 1px solid #142b44;
   border-radius: 8px;
   text-align: center;
-  background-color: #f7f7f7;
+  background-color: #0a1b2e; /* Fundo escuro */
+  color: #f8c253; /* Texto em amarelo/laranja */
 }
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.logo {
+  max-height: 80px;
+  width: auto;
+}
+
 .form-group {
   margin-bottom: 1rem;
   text-align: left;
 }
+
+label {
+  font-weight: bold;
+  color: #f8c253;
+}
+
 input {
   width: 100%;
   padding: 0.5rem;
   margin-top: 0.3rem;
   box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #000;
 }
+
 button {
   width: 100%;
   padding: 0.5rem;
@@ -93,8 +122,20 @@ button {
   cursor: pointer;
   border-radius: 4px;
   font-weight: 600;
+  margin-top: 1rem;
 }
+
 button:hover {
   background-color: #1d3a5f;
+}
+
+p {
+  margin-top: 1rem;
+  color: #f8c253;
+}
+
+a {
+  color: #f8c253;
+  text-decoration: underline;
 }
 </style>

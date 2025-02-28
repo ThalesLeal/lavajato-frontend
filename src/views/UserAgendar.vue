@@ -94,7 +94,7 @@
     </div>
 
     <!-- Botão de voltar no final, centralizado -->
-    <button class="btn-voltar" @click="goBack">Voltar ao Dashboard</button>
+    <button class="btn-voltar" @click="goBack">Voltar</button>
   </div>
 </template>
 
